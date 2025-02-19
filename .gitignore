@@ -139,3 +139,4 @@ _multiconfig.yml
 .history
 test.js
 data.js
+package-lock.json
