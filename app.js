@@ -1,4 +1,3 @@
-// app.js
 import express from 'express';
 import dotenv from 'dotenv';
 import rawSqlRouter from './routes/raw-sql.js';

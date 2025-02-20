@@ -140,3 +140,4 @@ _multiconfig.yml
 test.js
 data.js
 package-lock.json
+.idea/
