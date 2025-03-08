@@ -1,12 +1,12 @@
 import express from 'express';
 import database from '../config/database.js';
 
-const router = express.Router();
+const new_router = express.Router();
 
-router.post('/exec', async (req, res) => {
+new_router.post('/exec', async (req, res) => {
     try {
         const { sql } = req.body;
-        const [result] = await database.pool.query(sql); // 直接执行原始SQL
+        const [result] = await database.newpool.query(sql); // 直接执行原始SQL
         res.json({ data: result });
     } catch (error) {
         console.error('数据库查询错误:', error);
@@ -17,4 +17,4 @@ router.post('/exec', async (req, res) => {
     }
 });
 
-export default router;
+export default new_router;
