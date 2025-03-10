@@ -23,9 +23,9 @@ const newpool = mysql.createPool({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME_NEW,
     waitForConnections: true,
-    connectionLimit: 5,
-    maxIdle: 5,             // max idle connections, the default value is the same as `connectionLimit`
-    idleTimeout: 5000,      // idle connections timeout, in milliseconds, the default value 60000
+    connectionLimit: 10,
+    maxIdle: 10,             // max idle connections, the default value is the same as `connectionLimit`
+    idleTimeout: 5000,       // idle connections timeout, in milliseconds, the default value 60000
     queueLimit: 0,
     enableKeepAlive: true,
     keepAliveInitialDelay: 0,
