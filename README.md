@@ -13,29 +13,6 @@
 1. 直接使用“Download ZIP”下载程序包，解压下载好的程序包。
 2. 使用 `git clone https://github.com/EverettRain/MySQL-Connector.git` ，直接下载到所处目录。
 
-## 手动配置
-如果安装有，可使用任何 JetBrains IDE 打开下载好的程序包目录。
-在目录内新建文件 `.env`。
-打开文件（如果不使用 IDE 打开，可使用文本文档打开），输入如下内容：
-```env
-DB_HOST=
-DB_PORT=
-DB_USER=
-DB_PASSWORD=
-DB_NAME=
-PORT=
-```
-填写你需要配置的内容，其中：
-
-| 名称             | 含义                             |
-|----------------|--------------------------------|
-| `DB_HOST`      | MySQL 服务器的 IP 地址               |
-| `DB_PORT`      | MySQL 服务器所处端口号                 |
-| `DB_USER`      | 用来登录 MySQL 服务器的用户名称            |
-| `DB_PASSWORD`  | 用来登录 MySQL 服务器的用户密码            |
-| `DB_NAME`      | 需要访问的数据库的名称                    |
-| `PORT`         | 需要开放到本地的端口号                    |
-
 ## 环境准备
 打开终端，输入如下命令（如果不使用 IDE，可打开 MacOS 系统“终端”或 Windows 系统“PowerShell”，输入 `cd MySQL-Connector` 进入安装目录）：
 
@@ -64,11 +41,7 @@ npm install
 ```bash
 npm start
 ```
-如果运行成功，会显示
-```bash
-危险 API 运行在端口 3000
-使用 API 前缀为 http://localhost:3000/api/raw-sql/exec
-```
+
 ### 非 IDE 内运行
 - Windows 系统：启动软件包内的 start.bat 文件
 - MacOS 系统：

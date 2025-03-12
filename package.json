@@ -1,7 +1,7 @@
 {
   "name": "mysql-connector",
   "type": "module",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
@@ -14,6 +14,8 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.21.2",
-    "mysql2": "^3.12.0"
+    "inquirer": "^12.4.3",
+    "mysql2": "^3.12.0",
+    "nanospinner": "^1.2.2"
   }
 }

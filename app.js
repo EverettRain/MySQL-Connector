@@ -1,8 +1,37 @@
 import express from 'express';
 import fs from 'fs';
 import path from 'path';
-import rawSqlRouter from './routes/router.js';
-import dbPools from './config/database.js';
+import createRouter from './routes/router.js';
+import { initialize } from './application/initialize.js';
+import {loadDatabaseConfig} from "./config/database.js";
+
+let dbPools;
+
+async function startServer() {
+    // 先执行初始化检测（新增）
+    await initialize();
+
+    // 原配置加载逻辑保持不变
+    const { port, host, apiPrefix } = loadConfig();
+
+    const { loadDatabaseConfig } = await import('./config/database.js');
+    dbPools = loadDatabaseConfig();
+    
+    const app = express();
+    app.use(express.json());
+    app.use(apiPrefix, createRouter(dbPools));
+
+    app.listen(port, host, () => {
+        showStartupInfo(host, port, apiPrefix, dbPools);
+    }).on('error', (error) => {
+        if (error.code === 'EADDRINUSE') {
+            console.error(`✗ 端口 ${port} 被占用，请更换端口或终止占用进程`);
+        } else {
+            console.error('服务器启动失败:', error.message);
+        }
+        process.exit(1);
+    });
+}
 
 // 配置加载函数
 const loadConfig = () => {
@@ -30,29 +59,21 @@ const loadConfig = () => {
     }
 };
 
-// 初始化配置
-const { port, host, apiPrefix } = loadConfig();
-
-const app = express();
-
-app.use(express.json());
-
-// 注册路由
-app.use(apiPrefix, rawSqlRouter);
-
-// 启动服务
-app.listen(port, host, () => {
+function showStartupInfo(host, port, apiPrefix, in_dbPools) {
     console.log(`--------------------------------------------------`);
     console.log(`API 服务已启动`);
     console.log(`运行地址: http://${host}:${port}${apiPrefix}`);
 
-    // 动态生成所有可用端点
     console.log(`可用端点列表：`);
-    Object.keys(dbPools).forEach(poolId => {
-        console.log(`• http://${host}:${port}${apiPrefix}/${poolId}/exec`);
+    Object.keys(in_dbPools).forEach(poolId => {
+        console.log(`• http://${host}:${port}${apiPrefix}/exec/${poolId}`);
     });
 
     console.log(`--------------------------------------------------`);
-    console.log('按下 Ctrl + C 或 Control + C 退出服务进程');
-    console.log('日志信息如下：');
+    console.log('按下 Ctrl + C 退出服务进程');
+}
+
+startServer().catch(error => {
+    console.error('服务器启动失败:', error);
+    process.exit(1);
 });
