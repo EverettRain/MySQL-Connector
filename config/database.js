@@ -1,37 +1,46 @@
 import mysql from 'mysql2/promise';
-import 'dotenv/config';
+import { fileURLToPath } from 'url';
+import fs from 'fs';
+import path from 'path';
 
-const pool = mysql.createPool({
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    waitForConnections: true,
-    connectionLimit: 5,
-    maxIdle: 5,             // max idle connections, the default value is the same as `connectionLimit`
-    idleTimeout: 5000,      // idle connections timeout, in milliseconds, the default value 60000
-    queueLimit: 0,
-    enableKeepAlive: true,
-    keepAliveInitialDelay: 0,
-});
+// 获取当前文件路径
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-const newpool = mysql.createPool({
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME_NEW,
-    waitForConnections: true,
-    connectionLimit: 5,
-    maxIdle: 5,             // max idle connections, the default value is the same as `connectionLimit`
-    idleTimeout: 5000,      // idle connections timeout, in milliseconds, the default value 60000
-    queueLimit: 0,
-    enableKeepAlive: true,
-    keepAliveInitialDelay: 0,
-});
+// 读取JSON配置文件
+const configPath = path.join(__dirname,'..', '_data', 'database.json');
+const rawConfig = fs.readFileSync(configPath, 'utf-8');
+const dbConfig = JSON.parse(rawConfig);
 
-export default {
-    pool : pool,
-    newpool : newpool
-} 
+// 校验配置结构
+if (!dbConfig.pools || !Array.isArray(dbConfig.pools)) {
+    throw new Error('Invalid database.json format');
+}
+
+// 连接池容器
+const connectionPools = {};
+
+// 遍历创建连接池
+for (const [index, poolConfig] of dbConfig.pools.entries()) {
+    const requiredFields = ['id', 'host', 'user'];
+    const missingFields = requiredFields.filter(field => !poolConfig[field]);
+
+    if (missingFields.length > 0) {
+        throw new Error(`Pool ${index} missing required fields: ${missingFields.join(', ')}`);
+    }
+
+    connectionPools[poolConfig.id] = mysql.createPool({
+        host: poolConfig.host,
+        port: poolConfig.port || 3306,
+        user: poolConfig.user,
+        password: poolConfig.password || '',
+        database: poolConfig.database || '',
+        waitForConnections: true,
+        connectionLimit: poolConfig.connectionLimit || 5,
+        idleTimeout: poolConfig.idleTimeout || 5000,
+        queueLimit: poolConfig.queueLimit || 0,
+        enableKeepAlive: true
+    });
+}
+
+export default connectionPools;

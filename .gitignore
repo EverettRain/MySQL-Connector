@@ -129,7 +129,7 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-# Blog
+# SQL_Connector
 .DS_Store
 Thumbs.db
 public/
@@ -140,3 +140,7 @@ _multiconfig.yml
 package-lock.json
 .idea/
 .idea
+_data/database.json
+_data/user.json
+_data
+_data/
