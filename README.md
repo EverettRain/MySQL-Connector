@@ -14,6 +14,8 @@
 2. 使用 `git clone https://github.com/EverettRain/MySQL-Connector.git` ，直接下载到所处目录。
 
 ## 环境准备
+如果安装有，可使用任何 JetBrains IDE 或 VSCode 打开下载好的程序包目录，后续操作在 IDE 内完成会更加便利。
+
 打开终端，输入如下命令（如果不使用 IDE，可打开 MacOS 系统“终端”或 Windows 系统“PowerShell”，输入 `cd MySQL-Connector` 进入安装目录）：
 
 检查Node.js版本（需v14+）
