@@ -3,9 +3,24 @@ import fs from 'fs';
 import path from 'path';
 import createRouter from './routes/router.js';
 import { initialize } from './application/initialize.js';
-import {loadDatabaseConfig} from "./config/database.js";
+import { loadDatabaseConfig } from "./config/database.js";
+import { initLogSystem } from "./application/saveLog.js";
 
 let dbPools;
+let server;
+
+function gracefulShutdown() {
+    return new Promise((resolve) => {
+        if (server) {
+            server.close(() => {
+                console.log('\n✓ 服务器已停止监听');
+                resolve();
+            });
+        } else {
+            resolve();
+        }
+    });
+}
 
 async function startServer() {
     // 先执行初始化检测（新增）
@@ -16,12 +31,14 @@ async function startServer() {
 
     const { loadDatabaseConfig } = await import('./config/database.js');
     dbPools = loadDatabaseConfig();
+
+    const logSystem = initLogSystem(gracefulShutdown);
     
     const app = express();
     app.use(express.json());
-    app.use(apiPrefix, createRouter(dbPools));
+    app.use(apiPrefix, createRouter(dbPools, logSystem));
 
-    app.listen(port, host, () => {
+    server = app.listen(port, host, () => {
         showStartupInfo(host, port, apiPrefix, dbPools);
     }).on('error', (error) => {
         if (error.code === 'EADDRINUSE') {
@@ -31,6 +48,8 @@ async function startServer() {
         }
         process.exit(1);
     });
+    
+    return server;
 }
 
 // 配置加载函数
@@ -70,10 +89,14 @@ function showStartupInfo(host, port, apiPrefix, in_dbPools) {
     });
 
     console.log(`--------------------------------------------------`);
-    console.log('按下 Ctrl + C 退出服务进程');
+    console.log('输入 quit 退出服务进程');
 }
 
-startServer().catch(error => {
-    console.error('服务器启动失败:', error);
-    process.exit(1);
-});
+startServer()
+    .then(server => {
+        
+    })
+    .catch(error => {
+        console.error('服务器启动失败:', error);
+        process.exit(1);
+    });

@@ -12,6 +12,8 @@ const CONFIG_FILES = {
     database: 'database.json'
 };
 
+let addMore = false;
+
 // 初始化流程主函数
 export async function initialize() {
     const spinner = createSpinner('正在初始化配置...').start();
@@ -70,9 +72,9 @@ async function createUserConfig() {
             default: '/api/v1/query'
         },
         {
-            type: 'input',
+            type: 'confirm',
             name: 'logMode',
-            message: '是否需要输出成功访问日志 (true/false):',
+            message: '是否需要输出成功访问日志?',
             default: true
         }
     ]);
@@ -92,6 +94,9 @@ async function createDatabaseConfig() {
 
     // 至少需要一个连接池配置
     do {
+        addMore = false;
+        console.log('----------------------------------------');
+
         const answers = await inquirer.prompt([
             {
                 type: 'input',
@@ -137,6 +142,8 @@ async function createDatabaseConfig() {
             }
         ]);
 
+        addMore = answers.addMore;
+        
         pools.push({
             id: answers.id,
             host: answers.host,
@@ -146,7 +153,7 @@ async function createDatabaseConfig() {
             database: answers.database
         });
 
-    } while (pools.slice(-1)[0].addMore);
+    } while (addMore);
 
     return { pools };
 }

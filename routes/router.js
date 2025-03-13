@@ -1,8 +1,9 @@
 import express from 'express';
 import path from "path";
 import fs from "fs";
+import { initLogSystem } from '../application/savelog.js';
 
-export default function createRouter(dbPools) {
+export default function createRouter(dbPools, logSystem) {
     const router = express.Router();
 
     const COLORS = {
@@ -27,6 +28,10 @@ export default function createRouter(dbPools) {
         const startTime = Date.now();
         const {poolId} = req.params;
         const {sql} = req.body;
+        const logEntry = {
+            poolId: req.params.poolId,
+            sql: req.body.sql
+        };
 
         // 生成基础日志前缀
         const logPrefix = `${COLORS.time}[${new Date().toISOString()}] ${COLORS.pool}[${poolId}]${COLORS.reset}`;
@@ -49,6 +54,12 @@ export default function createRouter(dbPools) {
                     `耗时: ${Date.now() - startTime}ms`,
                     '----------------------------------------'
                 ].join('\n  '));
+                
+                logSystem.addLog({
+                    ...logEntry,
+                    success: true,
+                    duration: Date.now() - startTime
+                });
             }
 
             res.json({data: result, pool: poolId});
@@ -62,6 +73,13 @@ export default function createRouter(dbPools) {
                 `堆栈: ${error.stack.split('\n')[0]}`, // 只取第一行堆栈
                 '----------------------------------------'
             ].join('\n  '));
+            
+            logSystem.addLog({
+                ...logEntry,
+                success: false,
+                duration: Date.now() - startTime,
+                error: error.message
+            });
 
             res.status(500).json({ /* ... */});
         }

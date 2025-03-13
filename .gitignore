@@ -144,3 +144,5 @@ _data/database.json
 _data/user.json
 _data
 _data/
+_logs
+_logs/

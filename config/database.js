@@ -1,6 +1,5 @@
 import mysql from 'mysql2/promise';
 import { fileURLToPath } from 'url';
-import { watch } from 'fs';
 import fs from 'fs';
 import path from 'path';
 
