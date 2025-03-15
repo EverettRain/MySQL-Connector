@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>管理界面</title>
+    <link rel="stylesheet" href="./dashboard.css">
+    <!-- 引入外部 JavaScript 文件 -->
+    <script defer src="./dashboard.js"></script>
+</head>
+<body>
+<h1>当前连接池列表</h1>
+<div id="poolList" class="poolList">
+    <!-- 这里将由 JavaScript 动态填充 -->
+</div>
+<button id="addPoolButton">添加连接池</button>
+
+<!-- Modal content -->
+<div id="addPoolModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <form id="addPoolForm">
+            <label for="id">连接池ID:</label><br>
+            <input type="text" id="id" name="id"><br>
+            <label for="host">数据库主机地址:</label><br>
+            <input type="text" id="host" name="host" value="localhost"><br>
+            <label for="port">数据库端口:</label><br>
+            <input type="number" id="port" name="port" value="3306"><br>
+            <label for="user">数据库用户名:</label><br>
+            <input type="text" id="user" name="user" value="root"><br>
+            <label for="password">数据库密码:</label><br>
+            <input type="password" id="password" name="password"><br>
+            <label for="database">默认数据库名称:</label><br>
+            <input type="text" id="database" name="database"><br>
+            <button type="submit">添加</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

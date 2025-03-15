@@ -33,7 +33,7 @@ async function startServer() {
     const logSystem = initLogSystem(gracefulShutdown);
 
     const app = express();
-    app.use(express.static(path.join(process.cwd(), 'assets'))); // 提供静态资源
+    app.use(express.static(path.join(process.cwd(), 'web'))); // 提供静态资源
     app.use(express.json());
     
     const apiRouter = createRouter(dbPools, logSystem);
@@ -41,7 +41,7 @@ async function startServer() {
     app.use(apiPrefix, apiRouter.router);
 
     app.get('/dashboard', (req, res) => {
-        res.sendFile(path.join(process.cwd(), 'assets', 'dashboard.html'));
+        res.sendFile(path.join(process.cwd(), 'web', 'dashboard', 'dashboard.html'));
     });
 
     // 添加 /add-pool 路由

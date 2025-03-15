@@ -1,4 +1,19 @@
 body { font-family: Arial, sans-serif; }
+.poolList {
+    display: flex;
+    flex-wrap: wrap; /* 当容器宽度不足时自动换行 */
+    gap: 20px; /* 设置块之间的间距 */
+}
+.poolInfo {
+    width: 300px;
+    height: 200px;
+    background-color: antiquewhite;
+    box-shadow: #888888 1px 1px 1px;
+    border-radius: 5px;
+    margin-bottom: 30px;
+    padding: 10px;
+    box-sizing: border-box;
+}
 .modal {
     display: none;
     position: fixed;
