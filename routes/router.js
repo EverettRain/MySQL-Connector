@@ -1,7 +1,6 @@
 import express from 'express';
 import path from "path";
 import fs from "fs";
-import { initLogSystem } from '../application/savelog.js';
 
 export default function createRouter(dbPools, logSystem) {
     const router = express.Router();
@@ -40,6 +39,15 @@ export default function createRouter(dbPools, logSystem) {
             // 验证连接池是否存在
             if (!dbPools[poolId]) {
                 console.log(`${logPrefix} ${COLORS.error}× 无效连接池${COLORS.reset}`);
+                
+                if(config.logMode){
+                    logSystem.addLog({
+                        ...logEntry,
+                        success: false,
+                        duration: Date.now() - startTime,
+                        error: '无效连接池'
+                    });
+                }
                 return res.status(404).json({ /* ... */});
             }
 
@@ -85,5 +93,10 @@ export default function createRouter(dbPools, logSystem) {
         }
     });
 
-    return router;
+    return {
+        router,
+        updatePools: (newPools) => {
+            dbPools = newPools;
+        }
+    };
 }

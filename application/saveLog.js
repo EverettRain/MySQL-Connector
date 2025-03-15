@@ -34,7 +34,7 @@ export function initLogSystem(onShutdown) {
 // 输入处理函数
 function handleInput(input) {
     const command = input.trim().toLowerCase();
-    if (command === 'quit') {
+    if (command === 'quit' || command === 'stop') {
         process.stdin.pause(); // 暂停输入监听
         quit();
     }
@@ -53,14 +53,14 @@ async function quit() {
         spinner.stop();
         
         if (queryLogs.length === 0) {
-            spinner.success({ text: '本次运行无查询日志' });
+            spinner.success({ text: '本次运行无调用日志' });
             process.exit(0);
         }
 
         const { shouldSave } = await inquirer.prompt({
             type: 'confirm',
             name: 'shouldSave',
-            message: `检测到 ${queryLogs.length} 条查询日志，是否保存？`,
+            message: `检测到 ${queryLogs.length} 条调用日志，是否保存？`,
             default: true
         });
 
