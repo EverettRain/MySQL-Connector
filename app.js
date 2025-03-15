@@ -85,6 +85,78 @@ async function startServer() {
         res.json(dbConfig.pools);
     });
 
+    // 添加获取特定连接池的路由
+    app.get('/api/v1/pools/:id', (req, res) => {
+        const { id } = req.params;
+        const configPath = path.join(process.cwd(), '_data', 'database.json');
+        const rawConfig = fs.readFileSync(configPath, 'utf-8');
+        const dbConfig = JSON.parse(rawConfig);
+
+        const pool = dbConfig.pools.find(p => p.id === id);
+        if (!pool) {
+            return res.status(404).send('连接池未找到');
+        }
+
+        res.json(pool);
+    });
+
+    // 添加更新特定连接池的路由
+    app.put('/api/v1/pools/:id', express.json(), (req, res) => {
+        const { id } = req.params;
+        const { host, port, user, password, database } = req.body;
+
+        if (!host || !port || !user || !password || !database) {
+            return res.status(400).send('所有字段都是必需的');
+        }
+
+        const configPath = path.join(process.cwd(), '_data', 'database.json');
+        const rawConfig = fs.readFileSync(configPath, 'utf-8');
+        let dbConfig = JSON.parse(rawConfig);
+
+        const poolIndex = dbConfig.pools.findIndex(p => p.id === id);
+        if (poolIndex === -1) {
+            return res.status(404).send('连接池未找到');
+        }
+
+        dbConfig.pools[poolIndex] = {
+            ...dbConfig.pools[poolIndex],
+            host,
+            port,
+            user,
+            password,
+            database
+        };
+
+        fs.writeFileSync(configPath, JSON.stringify(dbConfig, null, 2), 'utf-8');
+
+        const newPools = loadDatabaseConfig(); // 重新加载连接池配置
+        apiRouter.updatePools(newPools);
+
+        res.status(200).send('连接池更新成功');
+    });
+
+    // 添加删除特定连接池的路由
+    app.delete('/api/v1/pools/:id', (req, res) => {
+        const { id } = req.params;
+        const configPath = path.join(process.cwd(), '_data', 'database.json');
+        const rawConfig = fs.readFileSync(configPath, 'utf-8');
+        let dbConfig = JSON.parse(rawConfig);
+
+        const poolIndex = dbConfig.pools.findIndex(p => p.id === id);
+        if (poolIndex === -1) {
+            return res.status(404).send('连接池未找到');
+        }
+
+        dbConfig.pools.splice(poolIndex, 1);
+
+        fs.writeFileSync(configPath, JSON.stringify(dbConfig, null, 2), 'utf-8');
+
+        const newPools = loadDatabaseConfig(); // 重新加载连接池配置
+        apiRouter.updatePools(newPools);
+
+        res.status(200).send('连接池删除成功');
+    });
+    
     server = app.listen(port, host, () => {
         showStartupInfo(host, port, apiPrefix, dbPools);
     }).on('error', (error) => {

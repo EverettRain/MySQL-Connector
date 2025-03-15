@@ -82,10 +82,18 @@ async function loadPools() {
             const portDiv = document.createElement('div');
             portDiv.textContent = `Port: ${pool.port}`;
 
+            // 创建“更多”按钮
+            const moreButton = document.createElement('button');
+            moreButton.textContent = '更多';
+            moreButton.onclick = () => {
+                window.location.href = `../database/database.html?poolId=${pool.id}`;
+            };
+
             // 将这些 div 添加到父容器中
             poolContainer.appendChild(idDiv);
             poolContainer.appendChild(hostDiv);
             poolContainer.appendChild(portDiv);
+            poolContainer.appendChild(moreButton);
 
             // 将整个池的信息添加到列表中
             poolListElement.appendChild(poolContainer);

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>数据库详情</title>
+    <link rel="stylesheet" href="./database.css">
+    <script defer src="./database.js"></script>
+</head>
+<body>
+<h1>数据库详情</h1>
+
+<div id="poolDetails">
+    <!-- 这里将由 JavaScript 动态填充 -->
+</div>
+
+<button id="backButton">返回管理页面</button>
+<button id="editButton">编辑</button>
+<button id="deleteButton">删除</button>
+
+<!-- 编辑模态框 -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <form id="editPoolForm">
+            <label for="editId">连接池ID:</label><br>
+            <input type="text" id="editId" name="id" readonly><br>
+            <label for="editHost">数据库主机地址:</label><br>
+            <input type="text" id="editHost" name="host"><br>
+            <label for="editPort">数据库端口:</label><br>
+            <input type="number" id="editPort" name="port"><br>
+            <label for="editUser">数据库用户名:</label><br>
+            <input type="text" id="editUser" name="user"><br>
+            <label for="editPassword">数据库密码:</label><br>
+            <input type="password" id="editPassword" name="password"><br>
+            <label for="editDatabase">默认数据库名称:</label><br>
+            <input type="text" id="editDatabase" name="database"><br>
+            <button type="submit">保存</button>
+        </form>
+    </div>
+</div>
+
+<!-- 删除确认模态框 -->
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <p>确定要删除此连接池吗？</p>
+        <button id="confirmDelete">确定</button>
+        <button id="cancelDelete">取消</button>
+    </div>
+</div>
+</body>
+</html>
