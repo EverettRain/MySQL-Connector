@@ -1,6 +1,7 @@
 import express from 'express';
 import path from "path";
 import fs from "fs";
+import { getBeijingISOStringWithZone } from "../application/time.js";
 
 export default function createRouter(dbPools, logSystem) {
     const router = express.Router();
@@ -33,7 +34,7 @@ export default function createRouter(dbPools, logSystem) {
         };
 
         // 生成基础日志前缀
-        const logPrefix = `${COLORS.time}[${new Date().toISOString()}] ${COLORS.pool}[${poolId}]${COLORS.reset}`;
+        const logPrefix = `${COLORS.time}[${getBeijingISOStringWithZone()}] ${COLORS.pool}[${poolId}]${COLORS.reset}`;
 
         try {
             // 验证连接池是否存在

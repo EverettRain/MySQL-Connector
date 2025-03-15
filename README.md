@@ -55,10 +55,24 @@ npm start
   ```bash
   ./start.sh
   ```
+  
+### 启动完成
+如果是第一次启动该程序，可以按照提示进行初始化信息，也可以后期自行在 `_data` 文件夹内编辑 JSON 来修改（JSON 中的个人信息未进行加密，请谨慎保管）。
+出现提示即代表运行成功：
+```bash
+--------------------------------------------------
+API 服务已启动
+管理后台运行在: http://localhost:3000/dashboard
+可用端点列表：
+• http://localhost:3000/api/v1/query/exec/example_database
+--------------------------------------------------
+```
+你可以通过网址 http://localhost:3000/dashboard 进入管理后台界面。
+
 ## API 使用说明
 基础端点
 ```http request
-POST http://localhost:{PORT}/api/raw-sql/exec
+POST http://localhost:{PORT}/api/v1/query/exec/example_database
 Content-Type: application/json
 
 {
@@ -67,7 +81,7 @@ Content-Type: application/json
 ```
 cURL 请求示例
 ```bash
-curl -X POST http://localhost:3000/api/raw-sql/exec \
+curl -X POST http://localhost:3000/api/v1/query/exec/example_database \
   -H "Content-Type: application/json" \
   -d '{"sql":"SHOW TABLES"}'
 ```

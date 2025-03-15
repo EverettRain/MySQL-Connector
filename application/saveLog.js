@@ -3,6 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import inquirer from 'inquirer';
 import { createSpinner } from 'nanospinner';
+import { getBeijingISOStringWithZone } from "./time.js";
 
 let shutdownCallback = () => {};
 
@@ -24,7 +25,7 @@ export function initLogSystem(onShutdown) {
     return {
         addLog: (logEntry) => {
             queryLogs.push({
-                timestamp: new Date().toISOString(),
+                timestamp: getBeijingISOStringWithZone(),
                 ...logEntry
             });
         }
@@ -83,10 +84,10 @@ async function quit() {
 // 保存日志文件
 async function saveLogFile() {
     const logsDir = path.join(__dirname, '../_logs');
-    const filename = `queryLog_${new Date()
-        .toISOString()
+    const filename = `queryLog_${getBeijingISOStringWithZone()
         .replace(/[:.]/g, '-')
         .slice(0, 19)}.txt`;
+    console.log(filename);
 
     // 创建日志目录
     await fs.mkdir(logsDir, { recursive: true });
