@@ -2,6 +2,7 @@ import express from 'express';
 import path from "path";
 import fs from "fs";
 import { getBeijingISOStringWithZone } from "../application/time.js";
+import {apiKeyMiddleware} from "../application/security.js";
 
 export default function createRouter(dbPools, logSystem) {
     const router = express.Router();
@@ -23,8 +24,8 @@ export default function createRouter(dbPools, logSystem) {
 
     const rawConfig = fs.readFileSync(configPath, 'utf-8');
     const config = JSON.parse(rawConfig);
-
-    router.post('/exec/:poolId', async (req, res) => {
+    
+    router.post('/exec/:poolId', apiKeyMiddleware, async (req, res) => {
         const startTime = Date.now();
         const {poolId} = req.params;
         const {sql} = req.body;

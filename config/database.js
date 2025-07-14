@@ -37,7 +37,7 @@ export function loadDatabaseConfig() {
             password: poolConfig.password || '',
             database: poolConfig.database || '',
             waitForConnections: true,
-            connectionLimit: poolConfig.connectionLimit || 5,
+            connectionLimit: poolConfig.connectionLimit || 200,
             idleTimeout: poolConfig.idleTimeout || 5000,
             queueLimit: poolConfig.queueLimit || 0,
             enableKeepAlive: true

@@ -4,37 +4,263 @@
     <meta charset="UTF-8">
     <title>管理界面</title>
     <link rel="stylesheet" href="./dashboard.css">
-    <!-- 引入外部 JavaScript 文件 -->
     <script defer src="./dashboard.js"></script>
+    <script>
+        document.getElementById('logoutButton').addEventListener('click', logout);
+    </script>
 </head>
 <body>
-<h1>当前连接池列表</h1>
-<div id="poolList" class="poolList">
-    <!-- 这里将由 JavaScript 动态填充 -->
-</div>
-<button id="addPoolButton">添加连接池</button>
+<div id="passwordOverlay" class="overlay"></div>
+<header>
+    <nav class="main-nav">
+        <ul>
+            <li><a href="#" class="nav-link active" data-section="database">数据库管理</a></li>
+            <li><a href="#" class="nav-link" data-section="security">安全管理</a></li>
+        </ul>
+    </nav>
+</header>
 
-<!-- Modal content -->
+<main>
+    <!-- 数据库管理部分 -->
+    <div id="database-section" class="content-section active">
+        <h1>数据库管理</h1>
+        <button id="addPoolButton" class="add-button">添加新连接池</button>
+
+        <div id="poolsContainer">
+            <table class="table-view" id="poolsTable">
+                <thead>
+                <tr>
+                    <th>连接池 ID</th>
+                    <th>数据库</th>
+                    <th>连接信息</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody id="poolsList">
+                <!-- 连接池将由JavaScript动态填充 -->
+                </tbody>
+            </table>
+
+            <!-- 空状态显示 -->
+            <div id="emptyPoolsState" class="empty-state" style="display: none;">
+                <div class="empty-state-icon">📊</div>
+                <div class="empty-state-text">还没有添加任何数据库连接池</div>
+                <button id="emptyAddPoolButton" class="add-button">添加新连接池</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 安全管理部分 -->
+    <section id="security-section" class="content-section">
+        <div class="security-container">
+            <!-- 左侧菜单 -->
+            <div class="security-sidebar">
+                <ul>
+                    <li><a href="#" class="security-link active" data-section="general">通用设置</a></li>
+                    <li><a href="#" class="security-link" data-section="keys">API密钥管理</a></li>
+                </ul>
+            </div>
+
+            <!-- 右侧内容区 -->
+            <div class="security-content">
+                <div id="general-section" class="security-subsection">
+                    <h2>通用设置</h2>
+
+                    <!-- 全局密码保护设置 -->
+                    <div class="settings-group">
+                        <h3>访问控制</h3>
+                        <div class="setting-item">
+                            <label class="switch-label">
+                                <span>全局密码保护</span>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="globalPasswordSwitch">
+                                    <span class="slider round"></span>
+                                </div>
+                            </label>
+                            <p class="setting-description">启用后，访问管理界面的任何部分都需要输入密码验证</p>
+                        </div>
+                        <button id="saveGeneralSettings" class="primary-button">保存设置</button>
+                    </div>
+
+                    <!-- 修改管理员密码按钮 -->
+                    <div class="settings-group" style="margin-top: 30px;">
+                        <h3>管理员密码</h3>
+                        <p>修改用于访问安全管理功能的管理员密码</p>
+                        <button id="changePasswordButton" class="primary-button">修改管理员密码</button>
+                    </div>
+                    <div class="settings-group" style="margin-top: 30px;">
+                        <h3>登出控制台</h3>
+                        <button id="logoutButton" class="secondary-button">登出</button>
+                    </div>
+                    
+                </div>
+
+                <div id="keys-section" class="security-subsection">
+                    <h2>API密钥管理</h2>
+                    <button id="createKeyButton" class="add-button">创建新密钥</button>
+
+                    <div id="keysContainer">
+                        <table class="table-view" id="keysTable">
+                            <thead>
+                            <tr>
+                                <th>密钥名称</th>
+                                <th>密钥 ID</th>
+                                <th>描述</th>
+                                <th>创建时间</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody id="keysList">
+                            <!-- API密钥将由JavaScript动态填充 -->
+                            </tbody>
+                        </table>
+
+                        <!-- 空状态显示 -->
+                        <div id="emptyKeysState" class="empty-state" style="display: none;">
+                            <div class="empty-state-icon">🔑</div>
+                            <div class="empty-state-text">还没有创建任何API密钥</div>
+                            <button id="emptyCreateKeyButton" class="add-button">创建新密钥</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- 添加连接池模态框 -->
 <div id="addPoolModal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
         <form id="addPoolForm">
             <h3>创建连接池</h3>
             <label for="id">连接池ID:</label><br>
-            <input type="text" id="id" name="id"><br>
+            <input type="text" id="id" name="id" required><br>
             <label for="host">数据库主机地址:</label><br>
-            <input type="text" id="host" name="host" value="localhost"><br>
+            <input type="text" id="host" name="host" value="localhost" required><br>
             <label for="port">数据库端口:</label><br>
-            <input type="number" id="port" name="port" value="3306"><br>
+            <input type="number" id="port" name="port" value="3306" required><br>
             <label for="user">数据库用户名:</label><br>
-            <input type="text" id="user" name="user" value="root"><br>
+            <input type="text" id="user" name="user" value="root" required><br>
             <label for="password">数据库密码:</label><br>
-            <input type="password" id="password" name="password"><br>
+            <input type="password" id="password" name="password" required><br>
             <label for="database">默认数据库名称:</label><br>
-            <input type="text" id="database" name="database"><br>
+            <input type="text" id="database" name="database" required><br>
             <button type="submit">添加</button>
         </form>
     </div>
 </div>
+
+<!-- 创建API密钥模态框 -->
+<div id="createKeyModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <form id="createKeyForm">
+            <h3>创建API密钥</h3>
+            <label for="keyName">密钥名称:</label><br>
+            <input type="text" id="keyName" name="keyName" required><br>
+            <label for="keyDescription">密钥描述:</label><br>
+            <textarea id="keyDescription" name="keyDescription" rows="3"></textarea><br>
+            <button type="submit">创建</button>
+        </form>
+    </div>
+</div>
+
+<!-- 显示新密钥模态框 -->
+<div id="showKeyModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>新API密钥已创建</h3>
+        <p>请保存此密钥，它只会显示一次！</p>
+        <div class="key-display">
+            <code id="newKeyValue"></code>
+            <button id="copyKeyButton">复制</button>
+        </div>
+        <div class="key-warning">
+            <p>⚠️ 请将此密钥安全保存，它不会再次显示。</p>
+        </div>
+        <button id="closeKeyModalButton">关闭</button>
+    </div>
+</div>
+
+<!-- 管理API密钥模态框 -->
+<div id="manageKeyModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>管理API密钥</h3>
+        <form id="manageKeyForm">
+            <input type="hidden" id="manageKeyId">
+            <label for="manageKeyName">密钥名称:</label><br>
+            <input type="text" id="manageKeyName" name="manageKeyName" required><br>
+            <label for="manageKeyDescription">密钥描述:</label><br>
+            <textarea id="manageKeyDescription" name="manageKeyDescription" rows="3"></textarea><br>
+            <div class="form-actions">
+                <button type="submit">更新</button>
+                <button type="button" id="rotateKeyButton">轮换密钥</button>
+                <button type="button" id="deleteKeyButton" class="danger">删除密钥</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 设置密码模态框 -->
+<div id="setPasswordModal" class="modal">
+    <div class="modal-content">
+        <h3>设置管理密码</h3>
+        <p>请为安全管理界面设置一个密码，以保护您的API密钥。</p>
+        <form id="setPasswordForm">
+            <label for="newPassword">密码:</label><br>
+            <input type="password" id="newPassword" name="newPassword" required><br>
+            <label for="confirmPassword">确认密码:</label><br>
+            <input type="password" id="confirmPassword" name="confirmPassword" required><br>
+            <div id="passwordMismatch" class="error-message" style="display: none;">两次输入的密码不匹配</div>
+            <button type="submit">设置密码</button>
+        </form>
+    </div>
+</div>
+
+<!-- 验证密码模态框 -->
+<div id="verifyPasswordModal" class="modal">
+    <div class="modal-content">
+        <h3>安全管理验证</h3>
+        <p>请输入管理密码以访问安全管理界面。</p>
+        <form id="verifyPasswordForm">
+            <label for="verifyPasswordInput">密码:</label><br>
+            <input type="password" id="verifyPasswordInput" name="password" required><br>
+            <div id="passwordIncorrect" class="error-message" style="display: none;">密码不正确</div>
+            <button type="submit">验证</button>
+            <button type="button" id="backToDatabaseButton">返回数据库管理</button>
+        </form>
+    </div>
+</div>
+
+<!-- 修改密码模态框 -->
+<div id="changePasswordModal" class="modal">
+    <div class="modal-content">
+        <span class="close-button" onclick="document.getElementById('changePasswordModal').style.display='none'">&times;</span>
+        <h3>修改管理员密码</h3>
+        <form id="changePasswordForm">
+            <div class="form-group">
+                <label for="currentPassword">当前密码</label>
+                <input type="password" id="currentPassword" required>
+            </div>
+            <div class="form-group">
+                <label for="newAdminPassword">新密码</label>
+                <input type="password" id="newAdminPassword" required minlength="6">
+                <p class="input-hint">密码长度至少为6个字符</p>
+            </div>
+            <div class="form-group">
+                <label for="confirmAdminPassword">确认新密码</label>
+                <input type="password" id="confirmAdminPassword" required>
+            </div>
+            <div id="passwordError" class="error-message" style="display: none;"></div>
+            <div class="form-actions">
+                <button type="button" class="secondary-button" onclick="document.getElementById('changePasswordModal').style.display='none'">取消</button>
+                <button type="submit" class="primary-button">确认修改</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 </body>
 </html>

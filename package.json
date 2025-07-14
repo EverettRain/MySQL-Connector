@@ -17,5 +17,8 @@
     "inquirer": "^12.4.3",
     "mysql2": "^3.12.0",
     "nanospinner": "^1.2.2"
+  },
+  "devDependencies": {
+    "express-session": "^1.18.1"
   }
 }
