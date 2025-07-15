@@ -204,7 +204,7 @@ async function saveUserSettings() {
         });
 
         if (response.ok) {
-            alert('用户设置保存成功');
+            alert('用户设置保存成功，部分设置修改需要重启服务端生效');
             return true;
         } else {
             const error = await response.json();

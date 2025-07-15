@@ -2,20 +2,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const poolId = urlParams.get('poolId');
     let apiPrefix = '/api/v1/query';
+    let hostname = 'localhost';
+    let portname = '3000';
     
     // 获取API前缀
     try {
-        const prefixResponse = await fetch('/api/v1/config/api-prefix');
+        const prefixResponse = await fetch('/api/api-prefix');
         if (prefixResponse.ok) {
-            const prefixData = await prefixResponse.json();
-            apiPrefix = prefixData.apiPrefix;
+            const userData = await prefixResponse.json();
+            apiPrefix = userData.apiPrefix;
+            hostname = userData.host;
+            portname = userData.port;
+            console.log(`获取到API信息：${hostname}:${portname}:${apiPrefix}`);
         }
     } catch (error) {
         console.error('获取API前缀失败:', error);
     }
 
     // 更新代码示例中的API前缀
-    updateApiExamplePrefix(apiPrefix);
+    updateApiExamplePrefix(hostname, portname, apiPrefix);
 
     if (!poolId) {
         alert('未找到连接池ID');
@@ -53,13 +58,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // 更新API示例中的前缀
-    function updateApiExamplePrefix(prefix) {
+    function updateApiExamplePrefix(hostname, portname, prefix) {
         const codeBlock = document.querySelector('.code-block pre');
         if (codeBlock) {
             // 更新示例代码中的URL部分
             const urlSpan = codeBlock.querySelector('.url');
             if (urlSpan) {
-                urlSpan.textContent = `http://localhost:3000${prefix}/exec/${poolId}`;
+                urlSpan.textContent = `http://${hostname}:${portname}${prefix}/exec/${poolId}`;
             }
         }
     }

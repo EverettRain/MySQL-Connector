@@ -117,15 +117,19 @@ async function startServer() {
 
                 try {
                     const config = JSON.parse(data);
-                    res.json({ apiPrefix: config.apiPrefix || '/api/v1/query' });
+                    res.json({ 
+                        apiPrefix: config.apiPrefix || '/api/v1/query',
+                        host: config.host || 'localhost',
+                        port: config.port || 3000
+                    });
                 } catch (parseError) {
                     console.error('解析配置文件失败:', parseError);
-                    res.status(500).json({ error: '无法解析配置文件', apiPrefix: '/api/v1/query' });
+                    res.status(500).json({ error: '无法解析配置文件' });
                 }
             });
         } catch (error) {
             console.error('获取API前缀失败:', error);
-            res.status(500).json({ error: '获取API前缀失败', apiPrefix: '/api/v1/query' });
+            res.status(500).json({ error: '获取API前缀失败' });
         }
     });
 
