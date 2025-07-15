@@ -281,10 +281,10 @@ export function verifyAdminPassword(password) {
         }
 
         const userData = JSON.parse(fs.readFileSync(userConfigPath, 'utf-8'));
-        console.log("读取到用户数据:", JSON.stringify({
-            hasPassword: !!userData.password,
-            hasSalt: !!userData.passwordSalt
-        }));
+        // console.log("读取到用户数据:", JSON.stringify({
+        //     hasPassword: !!userData.password,
+        //     hasSalt: !!userData.passwordSalt
+        // }));
 
         if (!userData.password || !userData.passwordSalt) {
             console.log("密码或盐值不存在");
@@ -292,8 +292,8 @@ export function verifyAdminPassword(password) {
         }
 
         const hashedPassword = hashKey(password, userData.passwordSalt);
-        console.log("输入密码哈希:", hashedPassword.substring(0, 10) + "...");
-        console.log("存储密码哈希:", userData.password.substring(0, 10) + "...");
+        // console.log("输入密码哈希:", hashedPassword.substring(0, 10) + "...");
+        // console.log("存储密码哈希:", userData.password.substring(0, 10) + "...");
         console.log("密码匹配:", hashedPassword === userData.password);
 
         return hashedPassword === userData.password;

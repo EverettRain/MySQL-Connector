@@ -14,6 +14,7 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.21.2",
+    "fs.promises": "^0.1.2",
     "inquirer": "^12.4.3",
     "mysql2": "^3.12.0",
     "nanospinner": "^1.2.2"

@@ -23,6 +23,7 @@ import session from 'express-session';
 
 let dbPools;
 let server;
+const userConfigPath = path.join(process.cwd(), '_data', 'user.json');
 
 function gracefulShutdown() {
     return new Promise((resolve) => {
@@ -104,6 +105,29 @@ async function startServer() {
     // 创建API路由
     const apiRouter = createRouter(dbPools, logSystem);
     app.use(apiPrefix, apiRouter.router);
+
+    // 获取API前缀路由
+    app.get('/api/api-prefix', (req, res) => {
+        try {
+            fs.readFile(userConfigPath, 'utf8', (err, data) => {
+                if (err) {
+                    console.error('读取用户设置失败:', err);
+                    return res.status(500).json({ error: '无法读取用户设置' });
+                }
+
+                try {
+                    const config = JSON.parse(data);
+                    res.json({ apiPrefix: config.apiPrefix || '/api/v1/query' });
+                } catch (parseError) {
+                    console.error('解析配置文件失败:', parseError);
+                    res.status(500).json({ error: '无法解析配置文件', apiPrefix: '/api/v1/query' });
+                }
+            });
+        } catch (error) {
+            console.error('获取API前缀失败:', error);
+            res.status(500).json({ error: '获取API前缀失败', apiPrefix: '/api/v1/query' });
+        }
+    });
 
     // 登录页面路由 - 无需认证
     app.get('/login', (req, res) => {
@@ -213,9 +237,9 @@ async function startServer() {
 
     // 控制台日志中间件（仅应用于认证后的路由）
     app.use((req, res, next) => {
-        console.log(`${req.method} ${req.path}`);
-        console.log('会话ID:', req.sessionID);
-        console.log('认证状态:', req.session.securityAuthenticated);
+        // console.log(`${req.method} ${req.path}`);
+        // console.log('会话ID:', req.sessionID);
+        // console.log('认证状态:', req.session.securityAuthenticated);
         next();
     });
 
@@ -248,6 +272,75 @@ async function startServer() {
         }
 
         res.json({ success: true });
+    });
+
+    // 获取用户设置
+    protectedSecurityRoutes.get('/user-settings', (req, res) => {
+        fs.readFile(userConfigPath, 'utf8', (err, data) => {
+            if (err) {
+                console.error('读取用户设置失败:', err);
+                return res.status(500).json({ error: '无法读取用户设置' });
+            }
+
+            try {
+                const config = JSON.parse(data);
+
+                // 移除敏感信息
+                const safeConfig = { ...config };
+                delete safeConfig.password;
+                delete safeConfig.passwordSalt;
+
+                res.json(safeConfig);
+            } catch (parseError) {
+                console.error('解析配置文件失败:', parseError);
+                res.status(500).json({ error: '无法解析配置文件' });
+            }
+        });
+    });
+
+    protectedSecurityRoutes.put('/user-settings', (req, res) => {
+        // 检查用户是否已认证
+        if (!req.session || !req.session.securityAuthenticated) {
+            return res.status(401).json({ error: '未授权访问' });
+        }
+
+        // 读取当前配置
+        fs.readFile(userConfigPath, 'utf8', (err, data) => {
+            if (err) {
+                console.error('读取用户设置失败:', err);
+                return res.status(500).json({ error: '无法读取用户设置' });
+            }
+
+            try {
+                const currentConfig = JSON.parse(data);
+
+                // 合并新设置，保留敏感信息
+                const newConfig = {
+                    ...req.body,
+                    password: currentConfig.password,
+                    passwordSalt: currentConfig.passwordSalt,
+                    passwordUpdated: currentConfig.passwordUpdated
+                };
+
+                // 验证必要字段
+                if (!newConfig.host || !newConfig.port || !newConfig.apiPrefix) {
+                    return res.status(400).json({ error: '主机、端口和API前缀为必填项' });
+                }
+
+                // 保存到文件
+                fs.writeFile(userConfigPath, JSON.stringify(newConfig, null, 2), 'utf8', (writeErr) => {
+                    if (writeErr) {
+                        console.error('保存用户设置失败:', writeErr);
+                        return res.status(500).json({ error: '无法保存用户设置' });
+                    }
+
+                    res.json({ success: true, message: '用户设置已更新' });
+                });
+            } catch (parseError) {
+                console.error('解析配置文件失败:', parseError);
+                res.status(500).json({ error: '无法解析配置文件' });
+            }
+        });
     });
 
     // 密钥管理

@@ -4,15 +4,16 @@
     <meta charset="UTF-8">
     <title>管理界面</title>
     <link rel="stylesheet" href="./dashboard.css">
-    <script defer src="./dashboard.js"></script>
+    <script type="module" src="./dashboard.js"></script>
 </head>
 <body>
 <header>
     <nav class="main-nav">
         <ul>
             <li><a href="#" class="nav-link active" data-section="database">数据库管理</a></li>
-            <li><a href="#" class="nav-link" data-section="security">安全管理</a></li>
+            <li><a href="#" class="nav-link" data-section="security">设置管理</a></li>
         </ul>
+        <div class="logo">DATABASE CONNECTOR</div>
     </nav>
 </header>
 
@@ -54,6 +55,7 @@
                 <ul>
                     <li><a href="#" class="security-link active" data-section="general">通用设置</a></li>
                     <li><a href="#" class="security-link" data-section="keys">API密钥管理</a></li>
+                    <li><a href="#" class="security-link" data-section="user">用户设置</a></li>
                 </ul>
             </div>
 
@@ -72,7 +74,7 @@
                     <!-- 修改管理员密码按钮 -->
                     <div class="settings-group" style="margin-top: 30px;">
                         <h3>管理员密码</h3>
-                        <p>修改用于访问安全管理功能的管理员密码</p>
+                        <p>修改用于访问 Dashboard 控制板的管理员密码</p>
                         <button id="changePasswordButton" class="primary-button">修改管理员密码</button>
                     </div>
                     <div class="settings-group" style="margin-top: 30px;">
@@ -107,6 +109,72 @@
                             <div class="empty-state-icon">🔑</div>
                             <div class="empty-state-text">还没有创建任何API密钥</div>
                             <button id="emptyCreateKeyButton" class="add-button">创建新密钥</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="user-section" class="security-subsection">
+                    <div class="section-header">
+                        <h2>用户设置</h2>
+                        <p>查看和修改系统用户设置</p>
+                    </div>
+
+                    <div class="settings-form">
+                        <!-- 主机地址 -->
+                        <div class="form-group">
+                            <label for="userHost">主机地址</label>
+                            <input type="text" id="userHost" class="form-control">
+                        </div>
+
+                        <!-- 端口 -->
+                        <div class="form-group">
+                            <label for="userPort">端口</label>
+                            <input type="number" id="userPort" class="form-control">
+                        </div>
+
+                        <!-- API前缀 -->
+                        <div class="form-group">
+                            <label for="userApiPrefix">API前缀</label>
+                            <input type="text" id="userApiPrefix" class="form-control">
+                        </div>
+
+                        <!-- 日志模式 -->
+                        <div class="form-group">
+                            <label for="userLogMode">日志模式</label>
+                            <div class="toggle-container">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="userLogMode" class="toggle-input">
+                                    <span class="toggle-label"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- 最大连接数 -->
+                        <div class="form-group">
+                            <label for="userMaxConnections">最大连接数</label>
+                            <input type="number" id="userMaxConnections" class="form-control">
+                        </div>
+
+                        <!-- 允许破坏性操作 -->
+                        <div class="form-group">
+                            <label for="userAllowDestructive">允许破坏性操作</label>
+                            <div class="toggle-container">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="userAllowDestructive" class="toggle-input">
+                                    <span class="toggle-label"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- 密码最后更新时间 -->
+                        <div class="form-group">
+                            <label>密码最后更新时间</label>
+                            <div id="userPasswordUpdated" class="form-control-static"></div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button id="saveUserSettings" class="primary-button">保存设置</button>
+                            <button id="resetUserSettings" class="secondary-button">重置</button>
                         </div>
                     </div>
                 </div>

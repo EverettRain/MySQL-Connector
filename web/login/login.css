@@ -29,7 +29,7 @@ body {
     background-color: #f5f5f5;
 
     /* 自定义背景图 - 取消注释并修改URL以使用自定义背景 */
-    background-image: url('https://hexo-image-storage.oss-cn-shanghai.aliyuncs.com/IMG352_compressed.jpg');
+    background-image: url('../images/background.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>数据库详情</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap">
     <link rel="stylesheet" href="./database.css">
     <script defer src="./database.js"></script>
 </head>
@@ -11,6 +12,17 @@
 
 <div id="poolDetails">
     <!-- 这里将由 JavaScript 动态填充 -->
+</div>
+<h2>API调用示例</h2>
+<div class="code-block">
+    <pre>
+        <span class="method">POST</span> <span class="url">/api/v1/pools/{poolId}</span>
+        <span class="comment">// 请求体</span>
+        {
+            <span class="json-key">"sql"</span>: <span class="json-string">"your_sql_query_sentence"</span>,
+            <span class="json-key">"apiKey"</span>: <span class="json-string">"your_api_key"</span>
+        }
+    </pre>
 </div>
 
 <button id="backButton">返回管理页面</button>
@@ -22,18 +34,30 @@
     <div class="modal-content">
         <span class="close">&times;</span>
         <form id="editPoolForm">
-            <label for="editId">连接池ID:</label><br>
-            <input type="text" id="editId" name="id" readonly><br>
-            <label for="editHost">数据库主机地址:</label><br>
-            <input type="text" id="editHost" name="host"><br>
-            <label for="editPort">数据库端口:</label><br>
-            <input type="number" id="editPort" name="port"><br>
-            <label for="editUser">数据库用户名:</label><br>
-            <input type="text" id="editUser" name="user"><br>
-            <label for="editPassword">数据库密码:</label><br>
-            <input type="password" id="editPassword" name="password"><br>
-            <label for="editDatabase">默认数据库名称:</label><br>
-            <input type="text" id="editDatabase" name="database"><br>
+            <div class="form-group">
+                <label for="editId">连接池ID:</label>
+                <input type="text" id="editId" name="id" readonly>
+            </div>
+            <div class="form-group">
+                <label for="editHost">数据库主机地址:</label>
+                <input type="text" id="editHost" name="host">
+            </div>
+            <div class="form-group">
+                <label for="editPort">数据库端口:</label>
+                <input type="number" id="editPort" name="port">
+            </div>
+            <div class="form-group">
+                <label for="editUser">数据库用户名:</label>
+                <input type="text" id="editUser" name="user">
+            </div>
+            <div class="form-group">
+                <label for="editPassword">数据库密码:</label>
+                <input type="password" id="editPassword" name="password">
+            </div>
+            <div class="form-group">
+                <label for="editDatabase">默认数据库名称:</label>
+                <input type="text" id="editDatabase" name="database">
+            </div>
             <button type="submit">保存</button>
         </form>
     </div>
@@ -44,8 +68,10 @@
     <div class="modal-content">
         <span class="close">&times;</span>
         <p>确定要删除此连接池吗？</p>
-        <button id="confirmDelete">确定</button>
-        <button id="cancelDelete">取消</button>
+        <div class="button-group">
+            <button id="confirmDelete">确定</button>
+            <button id="cancelDelete">取消</button>
+        </div>
     </div>
 </div>
 </body>

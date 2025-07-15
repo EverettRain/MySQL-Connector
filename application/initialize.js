@@ -42,50 +42,105 @@ async function checkConfig(type, createFn) {
 
     if (!fs.existsSync(configPath)) {
         console.log(`\n未找到 ${CONFIG_FILES[type]} 配置文件`);
-        const config = await createFn();
-        fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
-        console.log(`✓ 已生成配置文件: ${configPath}`);
+
+        // 添加超时处理
+        const configPromise = createFn();
+        const timeoutPromise = new Promise((_, reject) => {
+            setTimeout(() => reject(new Error('配置创建超时')), 10000); // 10秒超时
+        });
+
+        try {
+            const config = await Promise.race([configPromise, timeoutPromise]);
+            fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
+            console.log(`✓ 已生成配置文件: ${configPath}`);
+        } catch (error) {
+            console.error(`创建${type}配置失败:`, error);
+            // 创建默认配置
+            const defaultConfig = type === 'user' ? {
+                host: 'localhost',
+                port: 3000,
+                apiPrefix: '/api/v1/query',
+                logMode: true,
+                security: {
+                    maxConnections: 10,
+                    allowDestructive: false
+                }
+            } : { pools: [] };
+
+            fs.writeFileSync(configPath, JSON.stringify(defaultConfig, null, 2));
+            console.log(`✓ 已生成默认配置文件: ${configPath}`);
+            console.log(`  请前往 控制台 - 设置管理 - 用户设置 手动设置用户信息`);
+        }
     }
 }
 
 // 创建用户配置
 async function createUserConfig() {
-    const answers = await inquirer.prompt([
-        {
-            type: 'input',
-            name: 'host',
-            message: '请输入服务监听主机:',
-            default: 'localhost'
-        },
-        {
-            type: 'number',
-            name: 'port',
-            message: '请输入服务监听端口:',
-            default: 3000,
-            validate: input =>
-                input > 0 && input < 65535 || '请输入有效端口号 (1-65534)'
-        },
-        {
-            type: 'input',
-            name: 'apiPrefix',
-            message: '请输入API前缀:',
-            default: '/api/v1/query'
-        },
-        {
-            type: 'confirm',
-            name: 'logMode',
-            message: '是否需要输出成功访问日志?',
-            default: true
-        }
-    ]);
-    
-    return {
-        ...answers,
-        security: {
-            maxConnections: 10,
-            allowDestructive: false
-        }
-    };
+    // 检查是否在非交互环境中
+    if (process.env.NODE_ENV === 'production' || process.env.NON_INTERACTIVE) {
+        console.log('使用默认配置创建user.json');
+        return {
+            host: 'localhost',
+            port: 3000,
+            apiPrefix: '/api/v1/query',
+            logMode: true,
+            security: {
+                maxConnections: 10,
+                allowDestructive: false
+            }
+        };
+    }
+
+    try {
+        const answers = await inquirer.prompt([
+            {
+                type: 'input',
+                name: 'host',
+                message: '请输入服务监听主机:',
+                default: 'localhost'
+            },
+            {
+                type: 'number',
+                name: 'port',
+                message: '请输入服务监听端口:',
+                default: 3000,
+                validate: input =>
+                    input > 0 && input < 65535 || '请输入有效端口号 (1-65534)'
+            },
+            {
+                type: 'input',
+                name: 'apiPrefix',
+                message: '请输入API前缀:',
+                default: '/api/v1/query'
+            },
+            {
+                type: 'confirm',
+                name: 'logMode',
+                message: '是否需要输出成功访问日志?',
+                default: true
+            }
+        ]);
+
+        return {
+            ...answers,
+            security: {
+                maxConnections: 10,
+                allowDestructive: false
+            }
+        };
+    } catch (error) {
+        console.error('交互式配置失败，使用默认值:', error);
+        return {
+            host: 'localhost',
+            port: 3000,
+            apiPrefix: '/api/v1/query',
+            logMode: true,
+            security: {
+                maxConnections: 10,
+                allowDestructive: false
+            }
+        };
+    }
 }
 
 // 创建数据库配置

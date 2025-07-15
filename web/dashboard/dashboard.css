@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+
 /* 基础样式 */
 body {
     font-family: Arial, sans-serif;
@@ -10,7 +12,11 @@ body {
 .main-nav {
     background-color: #333;
     overflow: hidden;
-    margin-bottom: 20px;
+    margin-bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px 0 0;
 }
 
 .main-nav ul {
@@ -18,6 +24,21 @@ body {
     padding: 0;
     list-style-type: none;
     display: flex;
+}
+
+/* Logo样式 */
+.logo {
+    font-family: 'JetBrains Mono', monospace;
+    color: white;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: 2px;
+    padding-right: 10px;
+    user-select: none; 
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    cursor: default;
 }
 
 .main-nav li {
@@ -42,7 +63,7 @@ body {
 
 /* 内容区域 */
 main {
-    padding: 0 20px;
+    padding: 0;
 }
 
 .content-section {
@@ -236,9 +257,18 @@ button {
 }
 
 /* 安全管理样式 */
+#security-section {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: calc(100vh - 50px);
+}
+
 .security-container {
     display: flex;
-    min-height: 600px;
+    min-height: calc(100vh - 50px);
+    width: 100%;
+    margin: 0;
 }
 
 .security-sidebar {
@@ -277,6 +307,8 @@ button {
 .security-content {
     flex: 1;
     padding: 20px;
+    height: 100%;
+    overflow: auto;
 }
 
 .security-subsection {
@@ -650,7 +682,12 @@ form button.danger:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-weight: bold;
+    font-weight: 500;
+}
+
+.switch-label span {
+    flex-grow: 1; /* 文本可以占用剩余空间 */
+    margin-right: 10px; /* 与开关保持一定距离 */
 }
 
 .setting-description {
@@ -659,59 +696,60 @@ form button.danger:hover {
     font-size: 0.9em;
 }
 
+/* 开关样式 */
+.toggle-container {
+    width: 60px;
+    flex-shrink: 0;
+    flex-grow: 0;
+}
+
 .toggle-switch {
     position: relative;
     display: inline-block;
     width: 60px;
     height: 34px;
+    min-width: 60px;
+    flex-shrink: 0;
+    flex-grow: 0;
 }
 
-.toggle-switch input {
+.toggle-input {
     opacity: 0;
     width: 0;
     height: 0;
 }
 
-.slider {
+.toggle-label {
     position: absolute;
-    cursor: pointer;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
     background-color: #ccc;
+    border-radius: 34px;
+    cursor: pointer;
     transition: .4s;
+    width: 60px;
 }
 
-.slider:before {
+.toggle-label:before {
     position: absolute;
     content: "";
-    height: 26px;
-    width: 26px;
+    height: 22px;
+    width: 22px;
     left: 4px;
     bottom: 4px;
     background-color: white;
+    border-radius: 50%;
     transition: .4s;
 }
 
-input:checked + .slider {
+.toggle-input:checked + .toggle-label {
     background-color: #2196F3;
 }
 
-input:focus + .slider {
-    box-shadow: 0 0 1px #2196F3;
-}
-
-input:checked + .slider:before {
-    transform: translateX(26px);
-}
-
-.slider.round {
-    border-radius: 34px;
-}
-
-.slider.round:before {
-    border-radius: 50%;
+.toggle-input:checked + .toggle-label:before {
+    transform: translateX(30px);
 }
 
 /* 现代化表格视图样式 */
@@ -774,6 +812,10 @@ input:checked + .slider:before {
     font-weight: 500;
 }
 
+#database-section {
+    padding: 20px;
+}
+
 /* API密钥表格特定样式 */
 .key-name {
     font-weight: 600;
@@ -804,4 +846,236 @@ input:checked + .slider:before {
 
 textarea {
     resize: none;
+}
+
+/* 用户设置样式 */
+
+/* 整体容器样式 */
+#user-section {
+    padding: 20px 0;
+    margin: 0 auto 30px;
+    max-width: 700px;
+    width: 100%;
+}
+
+/* 标题样式 */
+#user-section .section-header h2 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+    border-bottom: none;
+}
+
+#user-section .section-header p {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 24px;
+}
+
+/* 表单组样式 */
+#user-section .form-group {
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+#user-section label {
+    width: 140px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #444;
+    margin-bottom: 0;
+    flex-shrink: 0;
+    margin-right: 10px;
+}
+
+/* 输入框样式 - 改为下横线样式 */
+#user-section .form-control {
+    flex-grow: 1;
+    max-width: 400px;
+    padding: 8px 0;
+    border: none;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 14px;
+    color: #333;
+    background-color: transparent;
+    transition: all 0.2s ease;
+}
+
+#user-section .form-control:focus {
+    border-bottom-color: #4a90e2;
+    box-shadow: none;
+    outline: none;
+}
+
+/* 静态表单控件 */
+#user-section .form-control-static {
+    flex-grow: 1;
+    max-width: 400px;
+    padding: 8px 0;
+    color: #666;
+    font-size: 14px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+/* 分组标题 */
+#user-section h3 {
+    font-size: 18px;
+    font-weight: 500;
+    color: #444;
+    margin: 40px 0 24px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+/* 开关样式 */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 28px;
+    flex-shrink: 0;
+    flex-grow: 0;
+}
+
+.toggle-input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #e0e0e0;
+    border-radius: 34px;
+    cursor: pointer;
+    transition: .4s;
+    width: 50px;
+}
+
+.toggle-label:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    border-radius: 50%;
+    transition: .4s;
+    top: 50%;
+    transform: translateY(-50%);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.toggle-input:checked + .toggle-label {
+    background-color: #4a90e2;
+}
+
+.toggle-input:checked + .toggle-label:before {
+    transform: translateX(22px) translateY(-50%);
+}
+
+/* 开关标签布局 */
+.switch-container {
+    display: flex;
+    align-items: center;
+}
+
+/* 按钮容器 */
+#user-section .form-actions {
+    margin-top: 40px;
+    display: flex;
+    gap: 16px;
+    justify-content: flex-start;
+}
+
+/* 主要按钮样式 */
+#user-section .primary-button {
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 12px 24px;
+    height: 46px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 5px rgba(74, 144, 226, 0.2);
+}
+
+#user-section .primary-button:hover {
+    background-color: #3a80d2;
+    box-shadow: 0 4px 8px rgba(74, 144, 226, 0.3);
+}
+
+#user-section .primary-button:active {
+    background-color: #2a70c2;
+    box-shadow: 0 1px 3px rgba(74, 144, 226, 0.2);
+    transform: translateY(1px);
+}
+
+/* 次要按钮样式 */
+#user-section .secondary-button {
+    background-color: #f5f5f5;
+    color: #444;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 12px 24px;
+    height: 46px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#user-section .secondary-button:hover {
+    background-color: #e8e8e8;
+    border-color: #d0d0d0;
+}
+
+#user-section .secondary-button:active {
+    background-color: #ddd;
+    transform: translateY(1px);
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    #user-section .form-group {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    #user-section label {
+        width: 100%;
+        margin-bottom: 8px;
+    }
+
+    #user-section .form-control,
+    #user-section .form-control-static {
+        width: 100%;
+        max-width: none;
+    }
+
+    .switch-container {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    #user-section .form-actions {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    #user-section .primary-button,
+    #user-section .secondary-button {
+        width: 100%;
+    }
 }

@@ -1,49 +1,279 @@
-body { font-family: Arial, sans-serif; }
-.poolList {
-    display: flex;
-    flex-wrap: wrap; /* 当容器宽度不足时自动换行 */
-    gap: 20px; /* 设置块之间的间距 */
+/* 基础样式 */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+    color: #333;
 }
-.poolInfo {
-    width: 300px;
-    height: 200px;
-    background-color: antiquewhite;
-    box-shadow: #888888 1px 1px 1px;
-    border-radius: 5px;
+
+h1, h2 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+h2 {
+    margin-top: 40px;
+}
+
+/* 按钮基础样式 */
+button {
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 10px 16px;
+    font-weight: 500;
+    transition: all 0.2s;
+    margin-right: 10px;
+}
+
+#backButton {
+    background-color: #6c757d;
+    color: white;
+}
+
+#backButton:hover {
+    background-color: #5a6268;
+}
+
+#editButton {
+    background-color: #007bff;
+    color: white;
+}
+
+#editButton:hover {
+    background-color: #0069d9;
+}
+
+#deleteButton {
+    background-color: #dc3545;
+    color: white;
+}
+
+#deleteButton:hover {
+    background-color: #c82333;
+}
+
+/* 连接池详情样式 */
+#poolDetails {
+    background-color: white;
+    border-radius: 8px;
+    padding: 24px;
     margin-bottom: 30px;
-    padding: 10px;
-    box-sizing: border-box;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
+
+#poolDetails div {
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+    display: flex;
+}
+
+#poolDetails div:last-child {
+    border-bottom: none;
+}
+
+#poolDetails div:before {
+    content: attr(data-label);
+    font-weight: bold;
+    width: 120px;
+    color: #495057;
+}
+
+/* 模态框样式 */
 .modal {
     display: none;
     position: fixed;
-    z-index: 1;
+    z-index: 1000;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgb(0,0,0);
-    background-color: rgba(0,0,0,0.4);
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    transition: all 0.3s ease;
+    align-items: center;
+    justify-content: center;
 }
+
 .modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 50%;
-    border-radius: 5px;
+    background-color: #ffffff;
+    padding: 28px;
+    width: 90%;
+    max-width: 700px;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    position: relative;
     box-sizing: border-box;
+    transform: translateY(0);
+    transition: transform 0.3s ease;
+    border: none;
 }
+
 .close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
+    position: absolute;
+    right: 20px;
+    top: 16px;
+    color: #adb5bd;
+    font-size: 24px;
+    font-weight: normal;
+    cursor: pointer;
+    transition: color 0.2s;
+    background: none;
+    border: none;
+    padding: 0;
+    line-height: 1;
+}
+
+.close:hover, .close:focus {
+    color: #495057;
+    text-decoration: none;
+}
+
+/* 表单样式 - 多行平行布局 */
+#editPoolForm {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 两列布局 */
+    gap: 20px; /* 列间距 */
+}
+
+#editPoolForm label {
+    font-weight: 500;
+    color: #495057;
+    margin-bottom: 6px;
+    display: block;
+}
+
+#editPoolForm input {
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 0px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 14px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#editPoolForm input:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+}
+
+#editPoolForm button {
+    grid-column: 1 / -1; /* 按钮跨越所有列 */
+    background-color: #007bff;
+    color: white;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 4px;
+    transition: all 0.2s;
+    margin-top: 10px;
+    width: fit-content;
+    justify-self: end; /* 按钮右对齐 */
+}
+
+#editPoolForm button:hover {
+    background-color: #0069d9;
+}
+
+/* 删除确认模态框样式 */
+#deleteModal .modal-content {
+    max-width: 400px;
+    text-align: center;
+}
+
+#deleteModal p {
+    font-size: 16px;
+    margin: 20px 0 30px;
+}
+
+#deleteModal .button-group {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+#confirmDelete {
+    background-color: #dc3545;
+    color: white;
+}
+
+#confirmDelete:hover {
+    background-color: #c82333;
+}
+
+#cancelDelete {
+    background-color: #6c757d;
+    color: white;
+}
+
+#cancelDelete:hover {
+    background-color: #5a6268;
+}
+
+/* 代码框样式 */
+.code-block {
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+    padding: 15px;
+    margin: 20px 0;
+    overflow-x: auto;
+}
+
+.code-block pre {
+    margin: 0;
+    font-family: 'JetBrains Mono', 'Consolas', 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #212529;
+}
+
+.code-block .method {
+    color: #d73a49; /* 红色 */
     font-weight: bold;
 }
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
+
+.code-block .url {
+    color: #032f62; /* 深蓝色 */
+}
+
+.code-block .json {
+    color: #24292e; /* 黑色 */
+}
+
+.code-block .json-key {
+    color: #005cc5; /* 蓝色 */
+}
+
+.code-block .json-string {
+    color: #22863a; /* 绿色 */
+}
+
+.code-block .json-number {
+    color: #e36209; /* 橙色 */
+}
+
+.code-block .comment {
+    color: #6a737d; /* 灰色 */
+    font-style: italic;
+}
+/* 表单组样式 */
+.form-group {
+    margin-bottom: 15px;
+}
+
+/* 修复代码块内的缩进 */
+.code-block pre {
+    margin: 0;
+    font-family: 'JetBrains Mono', 'Consolas', 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #212529;
+    white-space: pre;
 }
