@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理系统登录</title>
+    <link rel="stylesheet" href="./login.css">
+</head>
+<body>
+<div class="login-container">
+    <div class="login-content">
+        <div class="login-logo">
+            <h1>管理系统登录</h1>
+        </div>
+
+        <!-- 验证密码表单 -->
+        <div id="loginForm">
+            <form id="verifyPasswordForm">
+                <div class="error-message" id="passwordIncorrect">密码不正确，请重试</div>
+                <div class="input-group">
+                    <input type="password" id="verifyPasswordInput" name="password" placeholder="请输入管理密码" required>
+                </div>
+                <button type="submit" class="login-button">登录</button>
+            </form>
+        </div>
+
+        <!-- 设置密码表单 -->
+        <div id="setupForm" class="setup-password">
+            <h2>首次使用，请设置管理密码</h2>
+            <form id="setPasswordForm">
+                <div class="input-group">
+                    <input type="password" id="newPassword" name="newPassword" placeholder="新密码" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="确认密码" required>
+                </div>
+                <div class="error-message" id="passwordMismatch">两次输入的密码不匹配</div>
+                <button type="submit" class="login-button">设置密码</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="./login.js"></script>
+</body>
+</html>

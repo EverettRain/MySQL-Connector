@@ -179,6 +179,50 @@ button {
     background-color: #45a049;
 }
 
+/* 连接池模态框横向布局样式 */
+#addPoolModal .modal-content {
+    max-width: 700px; /* 增加宽度以适应横向布局 */
+}
+
+#addPoolForm {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 两列布局 */
+    gap: 20px; /* 列间距 */
+}
+
+#addPoolForm h3 {
+    grid-column: 1 / -1; /* 标题跨越所有列 */
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+#addPoolForm .form-group {
+    margin-bottom: 16px;
+}
+
+#addPoolForm label {
+    display: block;
+    margin-bottom: 6px;
+}
+
+#addPoolForm input {
+    width: 100%;
+    margin-bottom: 0; /* 覆盖默认的下边距 */
+}
+
+/* ID字段和表单按钮跨越所有列 */
+#addPoolForm .form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+#addPoolForm .form-actions {
+    grid-column: 1 / -1; /* 按钮区域跨越所有列 */
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #e9ecef;
+    justify-content: flex-end; /* 按钮靠右对齐 */
+}
+
 #addPoolButton {
     background-color: #4CAF50;
     color: white;
@@ -345,38 +389,108 @@ button {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0,0,0,0.4);
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    transition: all 0.3s ease;
 }
 
 .modal-content {
-    background-color: #fefefe;
-    margin: 10% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 50%;
+    background-color: #ffffff;
+    margin: 7% auto;
+    padding: 28px;
+    width: 90%;
     max-width: 500px;
-    border-radius: 5px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     position: relative;
     box-sizing: border-box;
+    transform: translateY(0);
+    transition: transform 0.3s ease;
+    border: none;
 }
 
 .close, .close-button {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
     position: absolute;
-    right: 15px;
-    top: 5px;
+    right: 20px;
+    top: 16px;
+    color: #adb5bd;
+    font-size: 24px;
+    font-weight: normal;
+    cursor: pointer;
+    transition: color 0.2s;
+    background: none;
+    border: none;
+    padding: 0;
+    line-height: 1;
 }
 
 .close:hover, .close:focus,
 .close-button:hover, .close-button:focus {
-    color: black;
+    color: #495057;
     text-decoration: none;
-    cursor: pointer;
+}
+
+.modal-header {
+    margin: -28px -28px 20px -28px;
+    padding: 20px 28px;
+    border-bottom: 1px solid #e9ecef;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.modal-header h3, .modal-header h4 {
+    margin: 0;
+    color: #212529;
+    font-weight: 600;
+}
+
+.modal-body {
+    margin-bottom: 24px;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding-top: 16px;
+    border-top: 1px solid #e9ecef;
+}
+
+/* 表单元素样式 */
+.modal form label {
+    font-weight: 500;
+    color: #495057;
+    margin-bottom: 6px;
+    display: block;
+}
+
+.modal form input,
+.modal form textarea {
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 16px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 14px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    resize: none;
+}
+
+.modal form input:focus,
+.modal form textarea:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+}
+
+.modal form button {
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 4px;
+    transition: all 0.2s;
 }
 
 /* 表单样式 */
@@ -424,47 +538,64 @@ form button.danger:hover {
 
 /* 密钥显示样式 */
 .key-display {
-    background-color: #f1f1f1;
-    padding: 10px;
-    border-radius: 4px;
-    margin: 15px 0;
+    background-color: #f8f9fa;
+    padding: 12px;
+    border-radius: 6px;
+    margin: 16px 0;
     display: flex;
     align-items: center;
+    border: 1px solid #e9ecef;
 }
 
 .key-display code {
     flex: 1;
     word-break: break-all;
-    padding: 5px;
+    padding: 8px;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    color: #212529;
+    font-size: 14px;
 }
 
 .key-display button {
-    margin-left: 10px;
-    background-color: #2196F3;
+    margin-left: 12px;
+    background-color: #007bff;
     color: white;
+    border: none;
     padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
 }
 
 .key-display button:hover {
-    background-color: #0b7dda;
+    background-color: #0069d9;
 }
 
 .key-warning {
-    color: #f44336;
-    font-weight: bold;
-    margin: 15px 0;
+    color: #dc3545;
+    font-weight: 500;
+    margin: 16px 0;
+    padding: 12px;
+    background-color: rgba(220, 53, 69, 0.1);
+    border-radius: 4px;
+    border-left: 4px solid #dc3545;
 }
 
 #closeKeyModalButton {
     width: 100%;
-    background-color: #555;
+    background-color: #6c757d;
     color: white;
-    padding: 10px;
-    margin-top: 15px;
+    border: none;
+    padding: 12px;
+    text-align: center;
+    margin-top: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.2s;
 }
 
 #closeKeyModalButton:hover {
-    background-color: #333;
+    background-color: #5a6268;
 }
 
 /* 空列表提示 */
@@ -499,10 +630,12 @@ form button.danger:hover {
     text-align: center;
 }
 
+/* 错误消息样式 */
 .error-message {
-    color: #f44336;
-    margin: 5px 0 15px;
+    color: #dc3545;
+    margin: -10px 0 16px;
     font-size: 14px;
+    font-weight: 500;
 }
 
 /* 开关样式 */
@@ -667,4 +800,8 @@ input:checked + .slider:before {
 .key-date {
     color: #6c757d;
     font-size: 0.85em;
+}
+
+textarea {
+    resize: none;
 }

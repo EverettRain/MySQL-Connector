@@ -1,0 +1,163 @@
+:root {
+    --primary-color: #4285f4;
+    --primary-hover: #3367d6;
+    --error-color: #ea4335;
+    --text-color: #202124;
+    --secondary-text: #5f6368;
+    --border-color: #dadce0;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --background-overlay: rgba(255, 255, 255, 0.9);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    /* 默认背景 */
+    background-color: #f5f5f5;
+
+    /* 自定义背景图 - 取消注释并修改URL以使用自定义背景 */
+    background-image: url('https://hexo-image-storage.oss-cn-shanghai.aliyuncs.com/IMG352_compressed.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 450px;
+    padding: 20px;
+}
+
+.login-content {
+    background-color: var(--background-overlay);
+    backdrop-filter: blur(10px);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px var(--shadow-color);
+    padding: 40px;
+    transition: all 0.3s ease;
+}
+
+.login-logo {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.login-logo img {
+    max-width: 120px;
+    height: auto;
+}
+
+h1 {
+    color: var(--text-color);
+    font-weight: 500;
+    font-size: 24px;
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+h2 {
+    color: var(--text-color);
+    font-weight: 500;
+    font-size: 18px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 16px;
+    transition: all 0.2s;
+    background-color: white;
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+}
+
+.login-button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.login-button:hover {
+    background-color: var(--primary-hover);
+}
+
+.login-button:active {
+    transform: scale(0.98);
+}
+
+.error-message {
+    color: var(--error-color);
+    margin-bottom: 16px;
+    font-size: 14px;
+    display: none;
+    text-align: center;
+}
+
+.setup-password {
+    display: none;
+}
+
+/* 响应式设计 */
+@media (max-width: 480px) {
+    .login-container {
+        padding: 10px;
+    }
+
+    .login-content {
+        padding: 30px 20px;
+    }
+}
+
+/* 深色模式支持 */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --primary-color: #8ab4f8;
+        --primary-hover: #aecbfa;
+        --text-color: #e8eaed;
+        --secondary-text: #9aa0a6;
+        --border-color: #5f6368;
+        --shadow-color: rgba(0, 0, 0, 0.3);
+        --background-overlay: rgba(32, 33, 36, 0.9);
+    }
+
+    body {
+        background-color: #202124;
+    }
+
+    input {
+        background-color: rgba(255, 255, 255, 0.05);
+        color: var(--text-color);
+    }
+}

@@ -5,12 +5,8 @@
     <title>管理界面</title>
     <link rel="stylesheet" href="./dashboard.css">
     <script defer src="./dashboard.js"></script>
-    <script>
-        document.getElementById('logoutButton').addEventListener('click', logout);
-    </script>
 </head>
 <body>
-<div id="passwordOverlay" class="overlay"></div>
 <header>
     <nav class="main-nav">
         <ul>
@@ -69,16 +65,7 @@
                     <!-- 全局密码保护设置 -->
                     <div class="settings-group">
                         <h3>访问控制</h3>
-                        <div class="setting-item">
-                            <label class="switch-label">
-                                <span>全局密码保护</span>
-                                <div class="toggle-switch">
-                                    <input type="checkbox" id="globalPasswordSwitch">
-                                    <span class="slider round"></span>
-                                </div>
-                            </label>
-                            <p class="setting-description">启用后，访问管理界面的任何部分都需要输入密码验证</p>
-                        </div>
+                        <p class="setting-description">这里暂时什么都没有～</p>
                         <button id="saveGeneralSettings" class="primary-button">保存设置</button>
                     </div>
 
@@ -90,7 +77,7 @@
                     </div>
                     <div class="settings-group" style="margin-top: 30px;">
                         <h3>登出控制台</h3>
-                        <button id="logoutButton" class="secondary-button">登出</button>
+                        <button id="logoutButton" class="primary-button" onclick="logout()">登出</button>
                     </div>
                     
                 </div>
@@ -134,19 +121,40 @@
         <span class="close">&times;</span>
         <form id="addPoolForm">
             <h3>创建连接池</h3>
-            <label for="id">连接池ID:</label><br>
-            <input type="text" id="id" name="id" required><br>
-            <label for="host">数据库主机地址:</label><br>
-            <input type="text" id="host" name="host" value="localhost" required><br>
-            <label for="port">数据库端口:</label><br>
-            <input type="number" id="port" name="port" value="3306" required><br>
-            <label for="user">数据库用户名:</label><br>
-            <input type="text" id="user" name="user" value="root" required><br>
-            <label for="password">数据库密码:</label><br>
-            <input type="password" id="password" name="password" required><br>
-            <label for="database">默认数据库名称:</label><br>
-            <input type="text" id="database" name="database" required><br>
-            <button type="submit">添加</button>
+
+            <div class="form-group full-width">
+                <label for="id">连接池ID:</label>
+                <input type="text" id="id" name="id" required>
+            </div>
+
+            <div class="form-group">
+                <label for="host">数据库主机地址:</label>
+                <input type="text" id="host" name="host" required>
+            </div>
+
+            <div class="form-group">
+                <label for="port">数据库端口:</label>
+                <input type="number" id="port" name="port" value="3306" required>
+            </div>
+
+            <div class="form-group">
+                <label for="user">数据库用户名:</label>
+                <input type="text" id="user" name="user" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">数据库密码:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <div class="form-group">
+                <label for="database">默认数据库名称:</label>
+                <input type="text" id="database" name="database" required>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="primary-button">添加</button>
+            </div>
         </form>
     </div>
 </div>
@@ -161,7 +169,9 @@
             <input type="text" id="keyName" name="keyName" required><br>
             <label for="keyDescription">密钥描述:</label><br>
             <textarea id="keyDescription" name="keyDescription" rows="3"></textarea><br>
-            <button type="submit">创建</button>
+            <div class="form-actions">
+                <button type="submit" class="primary-button">创建</button>
+            </div>
         </form>
     </div>
 </div>
@@ -203,37 +213,6 @@
     </div>
 </div>
 
-<!-- 设置密码模态框 -->
-<div id="setPasswordModal" class="modal">
-    <div class="modal-content">
-        <h3>设置管理密码</h3>
-        <p>请为安全管理界面设置一个密码，以保护您的API密钥。</p>
-        <form id="setPasswordForm">
-            <label for="newPassword">密码:</label><br>
-            <input type="password" id="newPassword" name="newPassword" required><br>
-            <label for="confirmPassword">确认密码:</label><br>
-            <input type="password" id="confirmPassword" name="confirmPassword" required><br>
-            <div id="passwordMismatch" class="error-message" style="display: none;">两次输入的密码不匹配</div>
-            <button type="submit">设置密码</button>
-        </form>
-    </div>
-</div>
-
-<!-- 验证密码模态框 -->
-<div id="verifyPasswordModal" class="modal">
-    <div class="modal-content">
-        <h3>安全管理验证</h3>
-        <p>请输入管理密码以访问安全管理界面。</p>
-        <form id="verifyPasswordForm">
-            <label for="verifyPasswordInput">密码:</label><br>
-            <input type="password" id="verifyPasswordInput" name="password" required><br>
-            <div id="passwordIncorrect" class="error-message" style="display: none;">密码不正确</div>
-            <button type="submit">验证</button>
-            <button type="button" id="backToDatabaseButton">返回数据库管理</button>
-        </form>
-    </div>
-</div>
-
 <!-- 修改密码模态框 -->
 <div id="changePasswordModal" class="modal">
     <div class="modal-content">
@@ -263,4 +242,7 @@
 </div>
 
 </body>
+<script>
+    document.getElementById('logoutButton').addEventListener('click', logout);
+</script>
 </html>

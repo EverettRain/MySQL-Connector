@@ -18,26 +18,26 @@ function hashKey(key, salt) {
 // 初始化安全配置
 export function initSecurity() {
     if (!fs.existsSync(securityPath)) {
-        // 生成初始测试密钥
-        const plainKey = "test-api-key-123456";
+        // 生成初始默认密钥
+        const plainKey = "default-api-key-000000";
         const salt = generateSalt();
         const hashedKey = hashKey(plainKey, salt);
 
         const initialSecurity = {
             apiKeys: [
                 {
-                    keyId: "test-key-" + crypto.randomBytes(4).toString('hex'),
+                    keyId: "default-key-" + crypto.randomBytes(4).toString('hex'),
                     hashedKey: hashedKey,
                     salt: salt,
-                    name: "测试密钥",
-                    description: "用于开发测试的API密钥",
+                    name: "初始密钥",
+                    description: "系统默认生成的API密钥",
                     created: new Date().toISOString()
                 }
             ]
         };
         fs.writeFileSync(securityPath, JSON.stringify(initialSecurity, null, 2), 'utf-8');
         console.log('✓ 已创建默认安全配置文件');
-        console.log(`✓ 测试API密钥: ${plainKey} (请妥善保管，此密钥仅显示一次)`);
+        console.log(`✓ 已创建默认API密钥，需要使用请前往安全设置进行轮换再使用`);
     }
 }
 
@@ -59,14 +59,23 @@ export function validateApiKey(apiKey) {
 
 // API密钥验证中间件
 export function apiKeyMiddleware(req, res, next) {
-    const apiKey = req.body.apiKey;
+    const apiKey = req.body?.apiKey;
 
     if (!apiKey) {
-        return res.status(401).json({ error: '缺少API密钥' });
+        return res.status(401).json({
+            error: "未提供API密钥",
+            message: "请在请求体中包含apiKey字段"
+        });
     }
 
-    if (!validateApiKey(apiKey)) {
-        return res.status(403).json({ error: '无效的API密钥' });
+    // 使用validateApiKey函数验证密钥
+    const isValidKey = validateApiKey(apiKey);
+
+    if (!isValidKey) {
+        return res.status(401).json({
+            error: "无效的API密钥",
+            message: "提供的API密钥无效或已过期"
+        });
     }
 
     next();
@@ -327,18 +336,23 @@ export function getGeneralSettings() {
 
         if (!fs.existsSync(settingsPath)) {
             // 创建默认设置
-            const defaultSettings = {
-                useGlobalPassword: false
-            };
+            const defaultSettings = {  };
             fs.writeFileSync(settingsPath, JSON.stringify(defaultSettings, null, 2), 'utf-8');
             return defaultSettings;
         }
 
         const rawData = fs.readFileSync(settingsPath, 'utf-8');
-        return JSON.parse(rawData);
+        const settings = JSON.parse(rawData);
+
+        if (settings.useGlobalPassword !== undefined) {
+            delete settings.useGlobalPassword;
+            fs.writeFileSync(settingsPath, JSON.stringify(settings, null, 2), 'utf-8');
+        }
+
+        return settings;
     } catch (error) {
         console.error('获取通用设置时出错:', error);
-        return { useGlobalPassword: false };
+        return {  };
     }
 }
 
